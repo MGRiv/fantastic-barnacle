@@ -1,6 +1,6 @@
 L.mapbox.accessToken = 'pk.eyJ1IjoiY2hyaXNnY28iLCJhIjoiY2lnODIxamRlMDlmYXRmbTY3YmRrbGZmbSJ9.7cteu78r4b6UYlHUaYvxTA';
   var map = L.mapbox.map('map', 'mapbox.streets')
-    .setView([37.8, -96], 4);
+    .setView([37.09024, -95.712891], 5);
 
   var popup = new L.Popup({ autoPan: false });
 
@@ -46,12 +46,12 @@ L.mapbox.accessToken = 'pk.eyJ1IjoiY2hyaXNnY28iLCJhIjoiY2lnODIxamRlMDlmYXRmbTY3Y
 
       popup.setLatLng(e.latlng);
       popup.setContent(
-        '<div class="marker-title">' + layer.feature.properties.name + '</div>' +
-        layer.feature.properties.population + ' Population' +
-        layer.feature.properties.density + ' People per square mile' +
-        layer.feature.properties.dnc + ' Democrats' +
-        layer.feature.properties.gop + ' Republicans' +
-        layer.feature.properties.other + ' Others'
+        '<h3 class="marker-title">' + layer.feature.properties.name + '</h3>' +
+        '<p><b>' + layer.feature.properties.population + '</b> Population</p>' +
+        '<p><b>' + layer.feature.properties.density + '</b> People per square mile</p>' +
+        '<p><b>' + layer.feature.properties.dnc + '%</b> Democrats</p>' +
+        '<p><b>' + layer.feature.properties.gop + '%</b> Republicans</p>' +
+        '<p><b>' + layer.feature.properties.other + '%</b> Others</p>'
       );
 
       if (!popup._map) popup.openOn(map);
