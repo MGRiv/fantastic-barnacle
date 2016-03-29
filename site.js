@@ -45,8 +45,14 @@ L.mapbox.accessToken = 'pk.eyJ1IjoiY2hyaXNnY28iLCJhIjoiY2lnODIxamRlMDlmYXRmbTY3Y
       var layer = e.target;
 
       popup.setLatLng(e.latlng);
-      popup.setContent('<div class="marker-title">' + layer.feature.properties.name + '</div>' +
-          layer.feature.properties.density + ' people per square mile');
+      popup.setContent(
+        '<div class="marker-title">' + layer.feature.properties.name + '</div>' +
+        layer.feature.properties.population + ' Population' +
+        layer.feature.properties.density + ' People per square mile' +
+        layer.feature.properties.dnc + ' Democrats' +
+        layer.feature.properties.gop + ' Republicans' +
+        layer.feature.properties.other + ' Others'
+      );
 
       if (!popup._map) popup.openOn(map);
       window.clearTimeout(closeTooltip);
@@ -74,19 +80,4 @@ L.mapbox.accessToken = 'pk.eyJ1IjoiY2hyaXNnY28iLCJhIjoiY2lnODIxamRlMDlmYXRmbTY3Y
     // On Click Handler
   }
 
-  map.legendControl.addLegend(getLegendHTML());
-
-  function getLegendHTML() {
-    var labels = [];
-
-    for (var i = 0; i < grades.length; i++) {
-      from = grades[i];
-      to = grades[i + 1];
-
-      labels.push(
-        '<li><span class="swatch" style="background:' + getColor(from + 1) + '"></span> ' +
-        from + (to ? '&ndash;' + to : '+')) + '</li>';
-    }
-
-    return '<span>Primary Parties</span><ul><li><span class="swatch" style="background:#3498db;">Democrat</li><li><span class="swatch" style="background:#e74c3c;">Republican</li><li><span class="swatch" style="background:#95a5a6;">Other</li></ul>';
-  }
+  map.legendControl.addLegend('<span>Primary Parties</span><ul><li><span class="swatch" style="background:#3498db;">Democrat</li><li><span class="swatch" style="background:#e74c3c;">Republican</li><li><span class="swatch" style="background:#95a5a6;">Other</li></ul>');
