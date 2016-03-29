@@ -16,20 +16,19 @@ L.mapbox.accessToken = 'pk.eyJ1IjoiY2hyaXNnY28iLCJhIjoiY2lnODIxamRlMDlmYXRmbTY3Y
           opacity: 0.1,
           color: 'black',
           fillOpacity: 0.7,
-          fillColor: getColor(feature.properties.density)
+          fillColor: getColor(feature.properties)
       };
   }
 
   // get color depending on population density value
-  function getColor(d) {
-      return d > 1000 ? '#8c2d04' :
-          d > 500  ? '#cc4c02' :
-          d > 200  ? '#ec7014' :
-          d > 100  ? '#fe9929' :
-          d > 50   ? '#fec44f' :
-          d > 20   ? '#fee391' :
-          d > 10   ? '#fff7bc' :
-          '#ffffe5';
+  function getColor(properties) {
+    if (properties.dnc > properties.other & properties.dnc > properties.gop) {
+      return "#3498db";
+    } else if (properties.gop > properties.other & properties.gop > properties.dnc) {
+      return "#e74c3c";
+    } else if (properties.other > properties.gop & properties.other > properties.dnc) {
+      return "#95a5a6";
+    }
   }
 
   function onEachFeature(feature, layer) {
@@ -72,15 +71,13 @@ L.mapbox.accessToken = 'pk.eyJ1IjoiY2hyaXNnY28iLCJhIjoiY2lnODIxamRlMDlmYXRmbTY3Y
   }
 
   function zoomToFeature(e) {
-      map.fitBounds(e.target.getBounds());
+    // On Click Handler
   }
 
   map.legendControl.addLegend(getLegendHTML());
 
   function getLegendHTML() {
-    var grades = [0, 10, 20, 50, 100, 200, 500, 1000],
-    labels = [],
-    from, to;
+    var labels = [];
 
     for (var i = 0; i < grades.length; i++) {
       from = grades[i];
@@ -91,5 +88,5 @@ L.mapbox.accessToken = 'pk.eyJ1IjoiY2hyaXNnY28iLCJhIjoiY2lnODIxamRlMDlmYXRmbTY3Y
         from + (to ? '&ndash;' + to : '+')) + '</li>';
     }
 
-    return '<span>People per square mile</span><ul>' + labels.join('') + '</ul>';
+    return '<span>Primary Parties</span><ul><li><span class="swatch" style="background:#3498db;">Democrat</li><li><span class="swatch" style="background:#e74c3c;">Republican</li><li><span class="swatch" style="background:#95a5a6;">Other</li></ul>';
   }
