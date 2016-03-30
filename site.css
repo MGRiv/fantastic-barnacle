@@ -64,3 +64,11 @@ h3 {
   font-weight: 300;
   color: rgb(176, 202, 219);
 }
+.bar {
+  float: left;
+  height: 30px;
+  line-height:30px;
+  text-align: center;
+  color:white;
+  vertical-align:middle;
+}

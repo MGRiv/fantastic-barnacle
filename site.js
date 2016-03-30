@@ -51,7 +51,8 @@ L.mapbox.accessToken = 'pk.eyJ1IjoiY2hyaXNnY28iLCJhIjoiY2lnODIxamRlMDlmYXRmbTY3Y
         '<p><b>' + layer.feature.properties.density + '</b> People per square mile</p>' +
         '<p><b>' + layer.feature.properties.dnc + '%</b> Democrats</p>' +
         '<p><b>' + layer.feature.properties.gop + '%</b> Republicans</p>' +
-        '<p><b>' + layer.feature.properties.other + '%</b> Others</p>'
+        '<p><b>' + layer.feature.properties.other + '%</b> Others</p>' +
+	'<p id="graph"></p><br><br>'
       );
 
       if (!popup._map) popup.openOn(map);
@@ -67,6 +68,7 @@ L.mapbox.accessToken = 'pk.eyJ1IjoiY2hyaXNnY28iLCJhIjoiY2lnODIxamRlMDlmYXRmbTY3Y
       if (!L.Browser.ie && !L.Browser.opera) {
           layer.bringToFront();
       }
+      display(layer.feature.properties.name);
   }
 
   function mouseout(e) {
@@ -81,3 +83,32 @@ L.mapbox.accessToken = 'pk.eyJ1IjoiY2hyaXNnY28iLCJhIjoiY2lnODIxamRlMDlmYXRmbTY3Y
   }
 
   map.legendControl.addLegend('<span>Primary Parties</span><ul><li><span class="swatch" style="background:#3498db;">Democrat</li><li><span class="swatch" style="background:#e74c3c;">Republican</li><li><span class="swatch" style="background:#95a5a6;">Other</li></ul>');
+
+var already = {};
+var colorconvert = {"gop":"#e74c3c","dnc":"#3498db","other":"#95a5a6"};
+
+var search = function(n){ //amortized O(1) but whatever
+    if (n in already){
+	return already[n];
+    }
+    var l = statesData.features;
+    for(var i=0;i<l.length;i++){
+	if (l[i].properties.name == n){
+	    already[n] = l[i].properties;
+	    return already[n];
+	}
+    }
+}
+
+var display = function(n){
+    var info = search(n);
+    var g = d3.select("#graph")
+        .selectAll("div")
+	.data(["gop","dnc","other"])
+	.enter()
+	.append("div")
+	.attr("class","bar")
+	.style("width",function (d) {return info[d].toString()+"%";})
+        .style("background-color", function (d) {return colorconvert[d];})
+	.text(function (d) {return info[d].toString()+"%";});
+}
