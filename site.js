@@ -1,4 +1,5 @@
 L.mapbox.accessToken = 'pk.eyJ1IjoiY2hyaXNnY28iLCJhIjoiY2lnODIxamRlMDlmYXRmbTY3YmRrbGZmbSJ9.7cteu78r4b6UYlHUaYvxTA';
+var temp = "Alabama";
   var map = L.mapbox.map('map', 'mapbox.streets')
     .setView([37.09024, -95.712891], 5);
 
@@ -69,6 +70,22 @@ L.mapbox.accessToken = 'pk.eyJ1IjoiY2hyaXNnY28iLCJhIjoiY2lnODIxamRlMDlmYXRmbTY3Y
           layer.bringToFront();
       }
       display(layer.feature.properties.name);
+      temp = layer.feature.properties.name;
+      infom = search(temp);
+      k.transition()
+	  .style("width",function (d) {return infom[d].toString()+"%";})
+	  .style("background-color", function (d) {return colorconvert[d];})
+	  .text(function (d) {return infom[d].toString()+"%";})
+	  .duration(0)
+	  .delay(0);
+      w.transition()
+	  .text(function (d) {return infom[d];})
+	  .duration(0)
+	  .delay(0);
+      q.transition()
+	  .text(function (d) {return infom[d];})
+	  .duration(0)
+	  .delay(0);
   }
 
   function mouseout(e) {
@@ -112,3 +129,29 @@ var display = function(n){
         .style("background-color", function (d) {return colorconvert[d];})
 	.text(function (d) {return info[d].toString()+"%";});
 }
+
+
+
+var infom = search(temp);
+var k = d3.select("#graph2")
+    .selectAll("div")
+    .data(["gop","dnc","other"])
+    .enter()
+    .append("div")
+    .attr("class","bar")
+    .style("width",function (d) {return infom[d].toString()+"%";})
+    .style("background-color", function (d) {return colorconvert[d];})
+    .text(function (d) {return infom[d].toString()+"%";});
+var w = d3.select("#statename")
+    .selectAll("text")
+    .data(["name"])
+    .enter()
+    .append("text")
+    .text(function (d) {return infom[d];});
+var q = d3.select("#statepop")
+    .selectAll("text")
+    .data(["population"])
+    .enter()
+    .append("text")
+    .text(function (d) {return infom[d];});   
+
